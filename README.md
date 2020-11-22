@@ -13,7 +13,6 @@
         -v HOST_CONFIG:/config \
         -e PUID=1000 \
         -e PGID=1000 \
-        -e TRANSMISSION_HOME=/config \
         -e TRANSMISSION_DOWNLOAD_DIR=/downloads/complete \
         -e TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete \
         -e TRANSMISSION_WATCH_DIR=/watch \
@@ -35,7 +34,6 @@
         environment:
           - PUID=1000
           - PGID=1000
-          - TRANSMISSION_HOME=/config
           - TRANSMISSION_DOWNLOAD_DIR=/downloads/complete
           - TRANSMISSION_INCOMPLETED_DIR=/downloads/incomplete
           - TRANSMISSION_WATCH_DIR=/watch # optional
@@ -57,7 +55,6 @@
 | :----: | --- | --- |
 | `-e PUID` | Set uid | `1000` |
 | `-e PGID` | Set gid | `1000` |
-| `-e TRANSMISSION_HOME` | Set config folder | `/config` |
 | `-e TRANSMISSION_DOWNLOAD_DIR` | Set download folder | `/downloads/complete`|
 | `-e TRANSMISSION_INCOMPLETE_DIR` | Set incomplete download folder | `/downloads/incomplete` |
 | `-e TRANSMISSION_WATCH_DIR` | Set watch folder. Disabled by default | |
