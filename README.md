@@ -62,7 +62,7 @@
 | `-e TRANSMISSION_USER` | Set transmission username. Authentication is off by default. Only enabled if user and password are both set. | |
 | `-e TRANSMISSION_PASSWORD` | Set transmission password. | |
 | `-e TZ` | Specify a timezone to use | `UTC` |
-| `-p 9091:9091 | Set management port. | `9091` |
+| `-p 9091:9091` | Set management port. | `9091` |
 | `-p 51413:51413` | Set listening port. | `51413` |
 | `-v /config` | Config folder goes here | |
 | `-v /downloads` | Downloads go here | |
