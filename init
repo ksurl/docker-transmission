@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "Setting permissions on /config."
+chown -R ${PUID}:${PGID} /config
+
 if [ ! -f /config/settings.json ]; then
   echo "No settings file found, using default settings."
   cp -f /etc/transmission/settings.json /config/settings.json
