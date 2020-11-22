@@ -1,0 +1,70 @@
+#!/bin/sh
+
+if [ ! -f "${TRANSMISSION_HOME}/settings.json" ]; then
+  echo "No settings file found, using default settings."
+  cp -f /etc/transmission/settings.json "${TRANSMISSION_HOME}/settings.json"
+  chown ${PUID}:${PGID} "${TRANSMISSION_HOME}/settings.json"
+fi
+
+DOWNLOAD_DIR=$(cat "${TRANSMISSION_HOME}/settings.json" | grep "download-dir\": \"${TRANSMISSION_DOWNLOAD_DIR}")
+if [ -z "$DOWNLOAD_DIR" ]; then
+  echo "Setting custom download folder ${TRANSMISSION_DOWNLOAD_DIR}."
+  sed -i "s+download-dir\": \".*\"+download-dir\": \"${TRANSMISSION_DOWNLOAD_DIR}\"+g" "${TRANSMISSION_HOME}/settings.json"
+fi
+
+INCOMPLETE_DIR=$(cat "${TRANSMISSION_HOME}/settings.json" | grep "incomplete-dir\": \"${TRANSMISSION_INCOMPLETE_DIR}")
+if [ -z "$INCOMPLETE_DIR" ]; then
+  echo "Setting custom incomplete folder ${TRANSMISSION_INCOMPLETE_DIR}."
+  sed -i "s+incomplete-dir\": \".*\"+incomplete-dir\": \"${TRANSMISSION_INCOMPLETE_DIR}\"+g" "${TRANSMISSION_HOME}/settings.json"
+fi
+
+WATCH_DIR=$(cat "${TRANSMISSION_HOME}/settings.json" | grep "watch-dir\": \"${TRANSMISSION_WATCH_DIR}")
+if [ ! -z "${TRANSMISSION_WATCH_DIR}" ] && [ -z "$WATCH_DIR" ]; then
+  echo "Setting custom watch folder ${TRANSMISSION_WATCH_DIR}."
+  sed -i "s+watch-dir\": \".*\"+watch-dir\": \"${TRANSMISSION_WATCH_DIR}\"+g" "${TRANSMISSION_HOME}/settings.json"
+  sed -i "s+watch-dir-enabled\": false,+watch-dir-enabled\": true,+g" "${TRANSMISSION_HOME}/settings.json"
+fi
+
+if [ ! -z "$TRANSMISSION_USER" ] && [ ! -z "$TRANSMISSION_PASSWORD" ]; then
+  echo "Setting transmission username and password."
+  sed -i "s+rpc-authentication-required\": .*,+rpc-authentication-required\": true,+g" "${TRANSMISSION_HOME}/settings.json"
+  sed -i "s+rpc-username\": \".*\"+rpc-username\": \"$TRANSMISSION_USER\"+g" "${TRANSMISSION_HOME}/settings.json"
+  sed -i "s+rpc-password\": \".*\"+rpc-password\": \"$TRANSMISSION_PASSWORD\"+g" "${TRANSMISSION_HOME}/settings.json"
+fi
+
+if [ ! -d "${TRANSMISSION_DOWNLOAD_DIR}" ]; then
+  echo "No download folder found, creating download folder ${TRANSMISSION_DOWNLOAD_DIR}."
+  mkdir -p "${TRANSMISSION_DOWNLOAD_DIR}"
+  chown -R ${PUID}:${PGID} "${TRANSMISSION_DOWNLOAD_DIR}"
+fi
+
+if [ ! -d "${TRANSMISSION_INCOMPLETE_DIR}" ]; then
+  echo "No incomplete download folder found, creating incomplete download folder ${TRANSMISSION_INCOMPLETE_DIR}."
+  mkdir -p "${TRANSMISSION_INCOMPLETE_DIR}"
+  chown -R ${PUID}:${PGID} "${TRANSMISSION_INCOMPLETE_DIR}"
+fi
+
+if [ ! -z "$TRANSMISSION_WATCH_DIR" ] && [ ! -d "${TRANSMISSION_WATCH_DIR}" ]; then
+  echo "No watch folder found, creating watch folder ${TRANSMISSION_WATCH_DIR}."
+  mkdir -p "${TRANSMISSION_WATCH_DIR}"
+  chown -R ${PUID}:${PGID} "${TRANSMISSION_WATCH_DIR}"
+fi
+
+case ${TRANSMISSION_WEB_UI} in
+  combustion)
+    echo "Setting web ui to 'combustion'."
+    export TRANSMISSION_WEB_HOME=/etc/transmission/web/combustion-release
+    ;;
+  kettu)
+    echo "Setting web ui to 'kettu'."
+    export TRANSMISSION_WEB_HOME=/etc/transmission/web/kettu-master
+    ;;
+  *)
+    ;;
+esac
+
+echo "Setting timezone to $TZ."
+cp -f "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
+
+echo "Starting transmission..."
+su-exec ${PUID}:${PGID} /usr/bin/transmission-daemon -f --log-error -g "${TRANSMISSION_HOME}"
