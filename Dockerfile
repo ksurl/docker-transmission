@@ -10,7 +10,6 @@ EXPOSE      9091 51413
 
 ENV         PUID=1000 \
             PGID=1000 \
-            TRANSMISSION_HOME=/config \
             TRANSMISSION_DOWNLOAD_DIR=/downloads/complete \
             TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete \
             TZ=UTC
@@ -19,7 +18,6 @@ COPY        init /init
 COPY        settings.json /etc/transmission/settings.json
 RUN         chmod +x /init && \
             apk add --no-cache \
-                #bash \
                 dumb-init \
                 su-exec \
                 transmission-cli \
