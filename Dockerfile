@@ -1,6 +1,6 @@
 FROM        alpine
 
-LABEL       org.opencontainers.image.source="https://github.com/ksurl/docker-flexget"
+LABEL       org.opencontainers.image.source="https://github.com/ksurl/docker-transmission"
 
 LABEL       maintainer="ksurl"
 
