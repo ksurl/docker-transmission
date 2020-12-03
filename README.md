@@ -1,5 +1,9 @@
 # Docker image for [Transmission](https://transmissionbt.com)
 
+[![](https://img.shields.io/badge/Docker%20Hub--blue)](https://hub.docker.com/r/ksurl/transmission) [![](https://img.shields.io/badge/GitHub%20Container%20Registry--yellow)](https://github.com/users/ksurl/packages/container/package/transmission)
+
+[![](https://img.shields.io/github/v/tag/ksurl/docker-transmission?label=image%20version&logo=docker)](https://hub.docker.com/r/ksurl/transmission) [![](https://img.shields.io/docker/image-size/ksurl/transmission/latest?color=lightgrey&logo=Docker)]() [![](https://img.shields.io/github/workflow/status/ksurl/docker-transmission/build?label=build&logo=Docker)](https://github.com/ksurl/docker-transmission/actions?query=workflow%3Abuild)
+
 * Based on alpine
 * Web ui: Default, Combustion, or Kettu
 
