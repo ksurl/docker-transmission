@@ -1,0 +1,22 @@
+version: "2"
+services:
+  flexget:
+    image: ksurl/transmission:latest
+    container_name: ksurl/transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TRANSMISSION_DOWNLOAD_DIR=/downloads/complete
+      - TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete
+      - TRANSMISSION_WATCH_DIR=/watch
+      - TRANSMISSION_WEB_UI=combustion
+      - TRANSMISSION_USER=<USERNAME>
+      - TRANSMISSION_PASSWORD=<PASSWORD>
+      - TZ=UTC
+    ports:
+      - 9091:9091
+      - 51413:51413
+    volumes:
+      - <HOST>/config:/config
+      - <HOST_MNT>/downloads:/downloads
+    restart: unless-stopped

@@ -1,14 +1,11 @@
-#!/bin/sh
+#!/usr/bin/with-contenv bash
 
-echo "Setting permissions on /config."
-chown -R ${PUID}:${PGID} /config
-
+# default config
 if [ ! -f /config/settings.json ]; then
-  echo "No settings file found, using default settings."
-  cp -f /etc/transmission/settings.json /config/settings.json
-  chown ${PUID}:${PGID} /config/settings.json
+  cp -f /defaults/settings.json /config/settings.json
 fi
 
+# custom config
 DOWNLOAD_DIR=$(cat /config/settings.json | grep "download-dir\": \"${TRANSMISSION_DOWNLOAD_DIR}")
 if [ -z "$DOWNLOAD_DIR" ]; then
   echo "Setting custom download folder ${TRANSMISSION_DOWNLOAD_DIR}."
@@ -38,21 +35,22 @@ fi
 if [ ! -d "${TRANSMISSION_DOWNLOAD_DIR}" ]; then
   echo "No download folder found, creating download folder ${TRANSMISSION_DOWNLOAD_DIR}."
   mkdir -p "${TRANSMISSION_DOWNLOAD_DIR}"
-  chown -R ${PUID}:${PGID} "${TRANSMISSION_DOWNLOAD_DIR}"
 fi
 
 if [ ! -d "${TRANSMISSION_INCOMPLETE_DIR}" ]; then
   echo "No incomplete download folder found, creating incomplete download folder ${TRANSMISSION_INCOMPLETE_DIR}."
   mkdir -p "${TRANSMISSION_INCOMPLETE_DIR}"
-  chown -R ${PUID}:${PGID} "${TRANSMISSION_INCOMPLETE_DIR}"
 fi
 
 if [ ! -z "$TRANSMISSION_WATCH_DIR" ] && [ ! -d "${TRANSMISSION_WATCH_DIR}" ]; then
   echo "No watch folder found, creating watch folder ${TRANSMISSION_WATCH_DIR}."
   mkdir -p "${TRANSMISSION_WATCH_DIR}"
-  chown -R ${PUID}:${PGID} "${TRANSMISSION_WATCH_DIR}"
 fi
 
+# permissions
+chown abc:abc /downloads
+
+# web ui
 case ${TRANSMISSION_WEB_UI} in
   combustion)
     echo "Setting web ui to 'combustion'."
@@ -65,9 +63,3 @@ case ${TRANSMISSION_WEB_UI} in
   *)
     ;;
 esac
-
-echo "Setting timezone to $TZ."
-cp -f "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
-
-echo "Starting transmission..."
-su-exec ${PUID}:${PGID} /usr/bin/transmission-daemon -f --log-error -g /config --logfile /config/transmission.log
