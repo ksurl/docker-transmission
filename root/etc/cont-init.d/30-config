@@ -49,6 +49,7 @@ fi
 
 # permissions
 chown abc:abc /downloads
+chown -R abc:abc /config
 
 # web ui
 case ${TRANSMISSION_WEB_UI} in
