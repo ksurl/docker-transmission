@@ -1,8 +1,8 @@
-version: "2"
+version: "3.8"
 services:
   flexget:
-    image: ksurl/transmission:latest
-    container_name: ksurl/transmission
+    image: ghcr.io/ksurl/transmission
+    container_name: transmission
     environment:
       - PUID=1000
       - PGID=1000

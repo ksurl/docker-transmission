@@ -1,4 +1,4 @@
-FROM        ghcr.io/linuxserver/baseimage-alpine:3.12
+FROM        ghcr.io/ksurl/baseimage-alpine
 
 LABEL       org.opencontainers.image.source="https://github.com/ksurl/docker-transmission"
 

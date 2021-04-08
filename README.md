@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/github/v/tag/ksurl/docker-transmission?label=image%20version&logo=docker)](https://hub.docker.com/r/ksurl/transmission) [![](https://img.shields.io/docker/image-size/ksurl/transmission/latest?color=lightgrey&logo=Docker)]() [![](https://img.shields.io/github/workflow/status/ksurl/docker-transmission/build?label=build&logo=Docker)](https://github.com/ksurl/docker-transmission/actions?query=workflow%3Abuild)
 
-* Based on alpine
+* Based on ghcr.io/ksurl/baseimage-alpine
 * Web ui: Default, Combustion, or Kettu
 
 # Usage
@@ -26,14 +26,14 @@
         -e TZ=UTC \
         -p 9091:9091 \
         -p 51413:51413 \
-        ksurl/transmission
+        ghcr.io/ksurl/transmission
 
 ## docker-compose 
 
-    version: "2"
+    version: "3.8"
     services:
       transmission:
-        image: ksurl/transmission
+        image: ghcr.io/ksurl/transmission
         container_name: transmission
         environment:
           - PUID=1000
